@@ -4,6 +4,19 @@ import hashlib
 import string
 import random
 import re
+import os
+
+
+def delete_image_if_not_default(image_path):
+    # Verifica se o caminho da imagem existe e se a imagem não é a padrão
+    if os.path.exists(image_path) and not image_path.endswith("default_cupcakes.jpeg"):
+        try:
+            os.remove(image_path)
+            print(f"Imagem {image_path} removida com sucesso.")
+        except Exception as e:
+            print(f"Erro ao remover a imagem {image_path}: {e}")
+    else:
+        print(f"A imagem {image_path} não foi removida, pois é a padrão ou não existe.")
 
 
 def html_star(qtd):

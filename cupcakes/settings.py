@@ -98,6 +98,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Celely
+CELERY_BROKER_URL = f"amqps://{config('CLOUDAMQP_USER', default='')}:{config('CLOUDAMQP_PASSWORD', default='')}@woodpecker.rmq.cloudamqp.com/{config('CLOUDAMQP_USER', default='')}"
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR/ "static_cdn"]
