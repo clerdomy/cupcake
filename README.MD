@@ -11,5 +11,5 @@
 ## Tecnologias
 - Frontend: HTML, CSS, JavaScript, Django
 - Backend: Django
-- Banco de Dados: MySQL
+- Banco de Dados: POSTGRESQL
 - Ferramentas e Bibliotecas: Django ORM, AJAX
