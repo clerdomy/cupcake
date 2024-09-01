@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<body>
+
+    <!-- Header Area Start Here -->
+
+    {% include "cupcakes/include/html-header.html" %}
+
+    <!-- Header Area End Here -->
+    <!-- Breadcrumb Area Start Here -->
+    <div class="breadcrumbs-area position-relative">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="breadcrumb-content position-relative section-content">
+                        <h3 class="title-3">Shopping Cart</h3>
+                        <ul>
+                            <li><a href="{% url 'home-page'%}">Home</a></li>
+                            <li>Shopping Cart</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Area End Here -->
+    <!-- cart main wrapper start -->
+    <div class="cart-main-wrapper mt-no-text">
+        <div class="container custom-area">
+            <div class="row">
+                <div class="col-lg-12 col-custom">
+                    <!-- Cart Table Area -->
+                    <div class="cart-table table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="pro-thumbnail">Image</th>
+                                    <th class="pro-title">Product</th>
+                                    <th class="pro-price">Price</th>
+                                    <th class="pro-quantity">Quantity</th>
+                                    <th class="pro-subtotal">Total</th>
+                                    <th class="pro-remove">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if carrinho %}
+                                {% for item in carrinho.itens.all %}
+                                <tr data-item-id="{{ item.id }}">
+                                    <td class="pro-thumbnail">
+                                        {% if item.cupcake.imagens.first %}
+                                        <a href="#"><img class="img-fluid"
+                                                src="{{ item.cupcake.imagens.first.normal.url }}"
+                                                alt="{{ item.cupcake.titulo }}" /></a>
+                                        {% else %}
+                                        <a href="#"><img class="img-fluid"
+                                                src="{% static 'assets/images/product/default.jpg' %}"
+                                                alt="Default Image" /></a>
+                                        {% endif %}
+                                    </td>
+                                    <td class="pro-title">
+                                        <a href="#">{{ item.cupcake.titulo }}</a>
+                                    </td>
+                                    <td class="pro-price">
+                                        <span>${{ item.cupcake.preco_sale|default:item.cupcake.preco }}</span>
+                                    </td>
+                                    <input type="hidden" value="{{ item.id }}" name="item_id">
+                                    <td class="pro-quantity">
+                                        <div class="quantity">
+                                            <div class="cart-plus-minus">
+                                                <input class="cart-plus-minus-box" value="{{ item.quantidade }}"
+                                                    type="text" name="quantidade">
+                                                <div class="dec qtybutton">-</div>
+                                                <div class="inc qtybutton">+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="pro-subtotal">
+                                        <span name="total_price">${{ item.get_total_price }}</span>
+                                    </td>
+                                    <td class="pro-remove">
+                                        <a href="{% url 'remover_item_do_carrinho' item.id %}"><i
+                                                class="lnr lnr-trash"></i></a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">Seu carrinho está vazio. <a href="{% url 'shop-page'%}">ir ao shop</a></td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="6">Seu carrinho está vazio. <a href="{% url 'shop-page'%}">ir ao shop</a></td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Cart Update Option -->
+                    <div class="cart-update-option d-block d-md-flex justify-content-between">
+                        <div class="apply-coupon-wrapper">
+                            <form action="{% url 'aplicar_cupom' %}" method="post" class="d-block d-md-flex">
+                                {% csrf_token %}
+                                <input type="text" name="coupon_code" placeholder="Enter Your Coupon Code" required />
+                                <button class="btn flosun-button primary-btn rounded-0 black-btn" type="submit">Apply
+                                    Coupon</button>
+                            </form>
+                        </div>
+                        <div class="cart-update mt-sm-16">
+                            <form action="{% url 'atualizar_carrinho' %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn flosun-button primary-btn rounded-0 black-btn" type="submit">Update
+                                    Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-5 ml-auto col-custom">
+                    <!-- Cart Calculation Area -->
+                    <div class="cart-calculator-wrapper">
+                        <div class="cart-calculate-items">
+                            <h3>Cart Totals</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <td>Sub Total</td>
+                                        <td>${{carrinho.get_total}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping</td>
+                                        <td>${{carrinho.shipping}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>discount</td>
+                                        <td>-${{carrinho.discount}}</td>
+                                    </tr>
+                                    <tr class="total">
+                                        <td>Total</td>
+                                        <td class="total-amount">${{carrinho.total}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <a href="{% url 'process_checkout' %}" class="btn flosun-button primary-btn rounded-0 black-btn w-100">Proceed
+                            To Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- cart main wrapper end -->
+    <!--Footer Area Start-->
+    {% include "cupcakes/include/html-footer.html" %}
+    <!--Footer Area End-->
+
+    <!-- JS
+============================================ -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Seleciona todos os inputs de quantidade
+            $("input[name='quantidade']").on("input", function () {
+                var row = $(this).closest('tr');  // Obtém a linha (tr) mais próxima do input
+                var item_id = row.find("input[name='item_id']").val();  // Captura o item_id correspondente na mesma linha
+                var quantidade = $(this).val();  // Captura o valor do campo 'quantidade'
+
+                // Envia a requisição AJAX
+                $.ajax({
+                    url: "{% url 'atualizar_quantidade_carrinho' %}",
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        item_id: item_id,
+                        quantity: quantidade
+                    }),
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    contentType: "application/json",
+                    success: function (response) {
+                        if (response.success) {
+                            console.log("Quantidade atualizada com sucesso!");
+                            console.log("Subtotal: " + response.subtotal);
+                            // Atualize o subtotal na linha correta do frontend
+                            row.find("span[name='total_price']").text(`$${response.subtotal.toFixed(2)}`);
+                        } else {
+                            console.error("Erro: " + response.error);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erro na requisição AJAX:", error);
+                    }
+                });
+            });
+
+            // Captura cliques nos botões de incremento e decremento
+            $(".qtybutton").on("click", function () {
+                var quantidadeInput = $(this).siblings(".cart-plus-minus-box");
+                quantidadeInput.trigger("input");  // Dispara o evento 'input'
+            });
+        });
+
+    </script>
+
+</body>
+
+{% endblock %}
