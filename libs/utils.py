@@ -64,3 +64,7 @@ def generate_number(size=100):
 def validar_email(email):
     padrao = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
     return re.match(padrao, email) is not None
+
+
+def sku_code(N=10):
+    return ''.join(random.choice(string.ascii_uppercase) for _ in range(N))
