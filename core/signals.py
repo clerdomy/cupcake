@@ -28,15 +28,15 @@ def save_profile(sender, instance, **kwargs):
     
 
 
-@receiver(post_save, sender=Cupcake)
-def add_default_cupcake_image(sender, instance, created, **kwargs):
-    if created:
-        # Adiciona uma imagem padrão ao cupcake recém-criado
-        CupcakeImage.objects.create(
-            cupcake=instance,
-            normal="cupcakes-fotos/default_cupcakes.jpeg",  # Caminho para a imagem padrão
-            descricao="Imagem padrão",
-        )
+# @receiver(post_save, sender=Cupcake)
+# def add_default_cupcake_image(sender, instance, created, **kwargs):
+#     if created:
+#         # Adiciona uma imagem padrão ao cupcake recém-criado
+#         CupcakeImage.objects.create(
+#             cupcake=instance,
+#             normal="cupcakes-fotos/default_cupcakes.jpeg",  # Caminho para a imagem padrão
+#             descricao="Imagem padrão",
+#         )
 
 
 @receiver(post_save, sender=CupcakeImage)
